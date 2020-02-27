@@ -1,6 +1,4 @@
 const http = require('http');
-const url = require('url');
-const path = require('path');
 const Router = require('./router');
 const methods = require('methods');
 
@@ -15,8 +13,12 @@ Application.prototype.use = function(path, handler) {
     this._router.use(path, handler);
 }
 
-
-
+methods.forEach(method => {
+    Application.prototype[method] = function(path, ...handlers) {
+        this.lazy_route();
+        this._router[method](path, handlers);
+    }
+})
  
 Application.prototype.listen = function() {
     let server = new http.createServer((req, res) => {
