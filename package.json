@@ -4,9 +4,18 @@
   "description": "express practice",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon app.js"
   },
-  "keywords": ["express", "web server"],
-  "author": "Stella",
-  "license": "MIT"
+  "keywords": [
+    "express",
+    "web server"
+  ],
+  "author": {
+    "name": "Stella",
+    "email": "stellayangfan@gmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }

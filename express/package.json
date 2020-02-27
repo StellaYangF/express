@@ -1,0 +1,29 @@
+{
+  "name": "express_practice",
+  "version": "1.0.0",
+  "description": "express node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StellaYangF/express.git"
+  },
+  "keywords": [
+    "express",
+    "practice"
+  ],
+  "author": {
+    "name": "Stella",
+    "email": "stellayangfan@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/StellaYangF/express/issues"
+  },
+  "homepage": "https://github.com/StellaYangF/express#readme",
+  "dependencies": {
+    "methods": "^1.1.2"
+  }
+}
