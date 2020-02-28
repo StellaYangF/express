@@ -6,24 +6,30 @@ function Route() {
     this.methods = Object.create({});
 }
 
-Route.prototype.dispatch = function(req, res, out) {
+Route.prototype.dispatch = function (req, res, out) {
     let index = 0;
     let method = req.method.toLowerCase();
-    const dispatch = () => {
+    const dispatch = err => {
         if (index === this.stack.length) return out();
         let layer = this.stack[index++];
 
-        if (layer.method === method) {
-            layer.handle_request(req, res, dispatch);
-        } else dispatch();
+        if (err) {
+            console.log(err);
+            return dispatch(err);
+        } else {
+            if (layer.method === method) {
+                layer.handle_request(req, res, dispatch);
+            } else dispatch();
+        }
+
     }
     dispatch(0);
 }
 
 methods.forEach(method => {
-    Route.prototype[method] = function(handlers) {
-        this.methods[method] = true;
-        handlers.forEach(handler =>{
+    Route.prototype[method] = function (...handlers) {
+        handlers.forEach(handler => {
+            this.methods[method] = true;
             let layer = new Layer('/', handler);
             layer.method = method;
             this.stack.push(layer);
