@@ -5,10 +5,17 @@ const Route = require('./route');
 const Layer = require('./layer');
 
 function Router() {
-    this.stack = [];
+    const router = function(req, res, next) {
+        router.handle(req, res, next);
+    }
+    router.stack = [];
+    router.__proto__ = proto;
+    return router;
 }
 
-Router.prototype.route = function(path) {
+const proto = Object.create({});
+
+proto.route = function(path) {
     const route = new Route();
     const layer = new Layer(path, route.dispatch.bind(route));
     layer.route = route;
@@ -16,7 +23,7 @@ Router.prototype.route = function(path) {
     return route;
 }
 
-Router.prototype.use = function(path, handler) {
+proto.use = function(path, handler) {
     if (typeof path === 'function') {
         [handler, path] = [ path, '/' ];
     }
@@ -26,22 +33,31 @@ Router.prototype.use = function(path, handler) {
 }
 
 methods.forEach(method => {
-    Router.prototype[method] = function(path, handlers) {
+    proto[method] = function(path, ...handlers) {
         let route = this.route(path);
         route[method](handlers);
     }
 })
 
-Router.prototype.handle = function(req, res, out) {
+proto.handle = function(req, res, out) {
     let { pathname } = url.parse(req.url);
     let index = 0;
+    let removed = "";
     const dispatch = () => {
+        if (removed) {
+            req.url = removed + req.url;
+            removed = "";
+        }
         if (index === this.stack.length) return out();
         let layer = this.stack[index++];
         
         if (layer.match(pathname)) {
-           if (!layer.route) {
-            layer.handle_request(ewq, res, dispatch);
+           if (!layer.route && layer.handler.length !== 4) {
+               if (layer.path !== "/") {
+                   removed = layer.path;
+                   req.url = req.url.slice(removed.length);
+               }
+                layer.handle_request(req, res, dispatch);
            } else {
                 if (layer.route.methods[req.method.toLowerCase()]) {
                     layer.handle_request(req, res, dispatch)
