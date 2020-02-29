@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require('./express');
 const app = express();
 const path = require('path');
 const Router = express.Router;
@@ -7,7 +7,7 @@ app.use(express.static(path.resolve(__dirname, 'public')));
 
 let user = new Router();
 user.get('/remove', (req, res, next) => {
-    console.log('sb');
+    console.log(req.params);
     res.send(`/user/remove`)
     next();
 })
