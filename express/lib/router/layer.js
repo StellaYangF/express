@@ -1,9 +1,17 @@
+let { pathToRegexp } = require('path-to-regexp');
+
 function Layer(path, handler) {
     this.path = path;
     this.handler = handler;
+    this.reg = pathToRegexp(this.path, this.keys=[]);
 }
 
 Layer.prototype.match = function(pathname) {
+    let match = pathname.match(this.reg);
+    if (match) {
+        this.params = this.keys.reduce((memo, current, index) => (memo[current.name] = match[index+1], memo), {});
+        return true;
+    }
     if (this.path === pathname) return true;
     if (!this.route) {
          if(this.path === '/'){
