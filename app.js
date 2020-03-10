@@ -16,6 +16,10 @@ user.get("/add", (req, res, next) => {
     next();
 })
 
+app.get('/', (req, res, next) => {
+    next('error');
+})
+
 app.use('/user', user);
 
 app.use(function(err, req, res, next) {
